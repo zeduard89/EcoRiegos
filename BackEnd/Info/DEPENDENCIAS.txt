@@ -1,0 +1,47 @@
+*Creo jason
+npm init --y
+
+
+*npm.... (dependencias) son las generales
+express
+morgan
+pg
+pg-hstore
+sequelize
+uuid            // claves ID unicas
+axios
+body-parser
+cookie-parser
+cors
+dotenv
+
+*npm... (dev dependencias) las que se ejecutan al desarrollar
+-save-dev nodemon
+
+
+
+*El Json configurar los scripts.... nodemon se ejecuta con-> npm start
+
+
+  "scripts": {
+    "start": "nodemon ./server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+
+Tambien se puede cambiar el "start", la idea es ejecutar un comando corto y un programa. Se configura segun necesidad
+en el deploy se genera un BUILD con un comando similar
+
+  "scripts": {
+    "dev": "nodemon ./server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+
+  // Creo carptas
+  -Controllers (Mayormente funciones que luego se ejecutan en Routes)
+  -Models
+  -Routes (las rutas)
+  -Config (dentro 2 archivos de configuracion DB y Server)
+  -un archivo index.js en la raiza del proyecto
+  

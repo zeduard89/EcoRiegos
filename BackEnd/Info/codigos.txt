@@ -1,0 +1,135 @@
+1:1
+
+------------------------------------------------------------------------------------------
+
+Crear un usuario y su perfil:
+typescript
+Copy code
+const user = await User.create({ name: 'John', lastName: 'Doe', email: 'john.doe@example.com' }); // Crear un nuevo usuario
+const profile = await Profile.create({ bio: 'I am a software developer' });                       // Crear un nuevo perfil
+await user.setProfile(profile);                                                                   // Establecer la relación entre el usuario y el perfil
+
+-------------------------------------------------------------------------------------------
+
+Obtener el perfil de un usuario:
+
+const user = await User.findByPk(userId); // Obtener el usuario por su ID
+const profile = await user?.getProfile(); // Obtener el perfil asociado al usuario
+console.log(profile);
+
+-----------------------------------------------------------------------------------------------
+
+
+
+1:N
+
+UserModel.hasMany(ProjectModel, { foreignKey: 'userId' });
+ProjectModel.belongsTo(UserModel, { foreignKey: 'userId' });
+
+
+----------------------------------------------------------------------------------------------
+Obtener todos los proyectos de un usuario:javascript
+
+const user = await UserModel.findByPk(userId);
+const projects = await user?.getProjects();
+console.log(projects);
+
+
+------------------------------------------------------------------------------------------------
+Crear un proyecto y asignarlo a un usuario existente:
+
+const user = await UserModel.findByPk(userId);                                  // Busco el usuario
+const project = await ProjectModel.create({ name: 'Nombre del proyecto' });     // creo el proyecto
+await user.addProject(project);                                                 // se lo asigno
+
+
+---------------------------------------------------------------------------------------
+
+Crear un proyecto y asignarlo a un usuario:
+
+const user = await User.findByPk(userId);                               // Obtener el usuario por su ID
+const project = await Project.create({ name: 'Nombre del proyecto' });  // Crear un nuevo proyecto
+await project.setUserId(user?.id);                                      // Establecer la foreign key userId del proyecto con el ID del usuario
+
+
+
+1:n entre UserModel y ProjectModel, el modelo UserModel generará automáticamente el método 
+getProjects para obtener los proyectos asociados
+setProjects para establecer los proyectos asociados.
+
+    await user.$set("projects", [createdProject])
+
+
+La razón por la que se utiliza $set en lugar de simplemente asignar el valor directamente es que Sequelize se encarga de manejar 
+la sincronización y la persistencia de la relación en la base de datos. Al utilizar $set, Sequelize realiza las operaciones necesarias 
+en la tabla de unión (si existe) para establecer la relación correctamente.
+
+
+
+---------------------------------------------------------------------------------------------
+
+N:N
+
+Ejemplo de uso de la relación N:N:
+
+const userId = req.query.userId as string
+validatorString.parse(userId)
+const user = await User.findByPk(userId);           // Obtener un usuario por su ID
+const project = await Project.findByPk(projectId);  // Obtener un proyecto por su ID
+
+const user = await UserModel.findByPk(userId)
+if (!user) throw new Error("User not found")
+
+
+ // Ejemplo de uso de los métodos de relación
+    const project = new ProjectModel();
+    project.title = "Nuevo proyecto";
+    await foundUser.$add('favoriteProjects', project); // Agregar un proyecto a la lista de favoritos
+
+    const favoriteProjects = await foundUser.$get('favoriteProjects'); // Obtener la lista de proyectos favoritos
+
+    const projectCount = await foundUser.$count('favoriteProjects'); // Contar la cantidad de proyectos favoritos
+
+    const hasFavoriteProjects = await foundUser.$has('favoriteProjects'); // Verificar si tiene proyectos favoritos
+
+    const projectToRemove = favoriteProjects[0];
+    await foundUser.$remove('favoriteProjects', projectToRemove); // Eliminar un proyecto de la lista de favoritos
+
+    const newProject = await foundUser.$create('favoriteProjects', { title: 'Nuevo proyecto' }); // Crear un nuevo proyecto y agregarlo a la lista de favoritos
+
+    return res.status(200).json(favoriteProjects)
+
+
+
+    //
+
+// Crear un nuevo comentario-----------------------------------------------------
+
+const newComment = await CommentModel.create({
+  name: "Ejemplo de comentario",
+  description: "Este es un comentario de ejemplo",
+  // Resto de los campos...
+});
+
+// Establecer una relación padre-hijo entre dos comentarios------------------------------
+
+const parentComment = await CommentModel.create({
+  name: "Comentario padre",
+  description: "Este es el comentario padre",
+  // Resto de los campos...
+});
+
+const childComment = await CommentModel.create({
+  name: "Comentario hijo",
+  description: "Este es el comentario hijo",
+  parentId: parentComment.id,
+  // Resto de los campos...
+});
+
+// Obtener los comentarios anidados de un comentario padre-------------------------------------
+
+const nestedComments = await parentComment.$get("nestedComments");
+
+// Obtener el comentario padre de un comentario hijo------------------------------------------
+
+const parent = await childComment.$get("parentComment");

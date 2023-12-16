@@ -1,6 +1,6 @@
 // import { HomeTest } from '@/components/home/HomeTest'
 import { Home } from "@/components/home/Home"
-import { NavBar } from "@/components/navBar/NavBar"
+import  NavBar  from "@/components/navBar/NavBar"
 import { Footer } from "@/components/footer/Footer"
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
